@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "semantic-search"
+version = "0.1.0"
+description = "Showcasing how semantic search works"
+authors = ["Niels <niels.holvoet@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+sentence-transformers = "^2.5.1"
+pypdf2 = "^3.0.1"
+pdfminer-six = "^20231228"
+pdf2image = "^1.17.0"
+pillow = "^10.2.0"
+pytesseract = "^0.3.10"
+pdfplumber = "^0.11.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
