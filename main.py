@@ -1,19 +1,26 @@
-from pdf_extraction import extract_text_from_pdf
+from document_repository import DocumentRepository
+from sentence_transformers import SentenceTransformer, util
 
-# Display the content of the page
-pdf_paths = ["input/report.pdf"]
+search_model = SentenceTransformer("all-MiniLM-L6-v2")
+from sentence_transformers.cross_encoder import CrossEncoder
+rerank_model = CrossEncoder("cross-encoder/stsb-roberta-base")
+top_k = 15
 
-for pdf_path in pdf_paths:
-    for dctkey, page_data in extract_text_from_pdf(pdf_path).items():
-        # Access page content using the last element in the list
-        page_content = page_data[-1]
-        # Do something with the page content
-        print(f"[Source {pdf_path}, Page '{dctkey}']")
-        print("-----------------------------------")
-        block = 0
-        for content in page_content:
-            length = len(content)
-            print(f"Source {pdf_path}, Page '{dctkey}', Block {block}, Length {length}")
-            print(f"{content}")
-            print("--------------------")
-            block = block + 1
+if __name__ == "__main__":
+    pdf_path = "input/report.pdf"
+    repository = DocumentRepository(search_model, rerank_model, util, top_k)
+    repository.store(pdf_path)
+
+    query = "What is the proposed technology strategy?"
+    documents = repository.query(query)
+    for document in documents:
+        doc = document["document"]
+        print(f'Source: {doc["source"]},index: {doc["index"]}')
+        print("Content:")
+        print(f'{doc["content"]}')
+        print("\r\n")
+        print("----------------------------------")
+        print("\r\n")
+        
+  
+
